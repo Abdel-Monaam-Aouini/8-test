@@ -26,7 +26,6 @@ export class ItunesSearchService {
       media: searchDto.media || null,
       entity: searchDto.entity || null,
       attribute: searchDto.attribute || null,
-      limit: searchDto.limit || ITUNES_DEFAULTS.limit,
       country: searchDto.country || ITUNES_DEFAULTS.country,
       lang: searchDto.lang || null,
       version: searchDto.version || null,
