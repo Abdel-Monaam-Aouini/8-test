@@ -67,9 +67,10 @@ export default function SearchFilters({
               className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             >
               <option value={10}>10 results</option>
+              <option value={15}>15 results</option>
               <option value={20}>20 results</option>
-              <option value={50}>50 results</option>
-              <option value={100}>100 results</option>
+              <option value={25}>25 results</option>
+              <option value={30}>30 results</option>
             </select>
           </div>
         </div>
