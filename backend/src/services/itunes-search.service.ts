@@ -21,25 +21,6 @@ export class ItunesSearchService {
   async searchAndStore(
     searchDto: SearchItunesDto,
   ): Promise<ItunesSearchResult[]> {
-    const cacheKey = JSON.stringify({
-      term: searchDto.term,
-      media: searchDto.media || null,
-      entity: searchDto.entity || null,
-      attribute: searchDto.attribute || null,
-      country: searchDto.country || ITUNES_DEFAULTS.country,
-      lang: searchDto.lang || null,
-      version: searchDto.version || null,
-      explicit: searchDto.explicit || null,
-      callback: searchDto.callback || null,
-    });
-
-    const existingResults = await this.getSearchResults(cacheKey);
-
-    if (existingResults.length > 0) {
-      return existingResults;
-    }
-
-    // If no existing results, proceed with API call
     const baseUrl = 'https://itunes.apple.com/search';
     const params = new URLSearchParams();
 
@@ -122,7 +103,7 @@ export class ItunesSearchService {
           trackCount: result.trackCount,
           discCount: result.discCount,
           isStreamable: result.isStreamable,
-          searchTerm: cacheKey,
+          searchTerm: searchDto.term,
         });
 
         searchResults.push(searchResult);
@@ -139,7 +120,7 @@ export class ItunesSearchService {
           .execute();
       }
 
-      const savedResults = await this.getSearchResults(cacheKey);
+      const savedResults = await this.getSearchResults(searchDto.term);
 
       return savedResults;
     } catch (error: unknown) {
@@ -149,9 +130,9 @@ export class ItunesSearchService {
     }
   }
 
-  async getSearchResults(cacheKey: string): Promise<ItunesSearchResult[]> {
+  async getSearchResults(term: string): Promise<ItunesSearchResult[]> {
     const existingResults = await this.itunesSearchResultRepository.find({
-      where: { searchTerm: cacheKey },
+      where: { searchTerm: term },
       order: { createdAt: 'DESC' },
     });
 
